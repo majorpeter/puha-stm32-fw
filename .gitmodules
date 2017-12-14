@@ -1,0 +1,15 @@
+[submodule "build-tools"]
+	path = build-tools
+	url = https://github.com/majorpeter/build-tools.git
+[submodule "modules/mprotocol-iface-stm32-usart"]
+	path = modules/mprotocol-iface-stm32-usart
+	url = https://github.com/majorpeter/mprotocol-iface-stm32-usart.git
+[submodule "modules/mprotocol-server"]
+	path = modules/mprotocol-server
+	url = https://github.com/majorpeter/mprotocol-server.git
+[submodule "modules/ws2812-stm32"]
+	path = modules/ws2812-stm32
+	url = https://github.com/majorpeter/ws2812-stm32.git
+[submodule "modules/mprotocol-nodes"]
+	path = modules/mprotocol-nodes
+	url = https://github.com/majorpeter/mprotocol-nodes.git
