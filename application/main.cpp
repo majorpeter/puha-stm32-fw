@@ -3,6 +3,8 @@
 
 #include "EspLink.h"
 #include <ws2812-stm32/LedStripController.h>
+#include <ws2812-stm32/Color.h>
+#include <ws2812-stm32/node/LedStripControllerNode.h>
 #include <mprotocol-server/ProtocolParser.h>
 #include <mprotocol-nodes/RootNode.h>
 
@@ -14,12 +16,14 @@ int main() {
     Hardware::SysTickInit();
     Hardware::IRQ_Init();
 
-    /*Canvas* canvas = new HardwareCanvas(Hardware::LedStripDataOutPort, Hardware::LedStripDataOutPin, 180, 0, false);
-    canvas->init();
+    LedStripController ledStrip(Hardware::LedStripDataOutPort, Hardware::LedStripDataOutPin, 180, 0, false);
+    ledStrip.init();
+    Color colors[180];
     for (uint8_t i = 0; i < 10; i++) {
-        canvas->set(i, Color::red * ((10 - i) / 10.f));
+        colors[i] = Color::red * ((10 - i) / 10.f);
     }
-    canvas->draw();*/
+    ledStrip.writeLeds(colors, 180);
+    RootNode::getInstance()->addChild(new LedStripControllerNode(&ledStrip));
 
     EspLink* serialInterface = new EspLink(Hardware::EspResetPort,
             Hardware::EspResetPin, Hardware::EspChPdPort, Hardware::EspChPdPin);
