@@ -1,1 +1,7 @@
+# output folder
 build/
+
+# eclipse files
+.project
+.cproject
+.settings/
