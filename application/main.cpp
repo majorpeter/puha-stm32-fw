@@ -1,6 +1,7 @@
 #include "Hardware.h"
 #include "diag/Trace.h"
 
+#include "nodes/SystemNode.h"
 #include "EspLink.h"
 #include <ws2812-stm32/LedStripController.h>
 #include <ws2812-stm32/Color.h>
@@ -15,6 +16,8 @@ int main() {
     Hardware::GPIO_Remap();
     Hardware::SysTickInit();
     Hardware::IRQ_Init();
+
+    RootNode::getInstance()->addChild(new SystemNode());
 
     LedStripController ledStrip(Hardware::LedStripDataOutPort, Hardware::LedStripDataOutPin, 180, 0, false);
     ledStrip.init();
