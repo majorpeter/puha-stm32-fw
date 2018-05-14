@@ -16,10 +16,7 @@ class FunctionButton;
 namespace Hardware {
 
 static GPIO_TypeDef * const LedStripDataOutPort = GPIOB;
-static const uint16_t LedStripDataOutPin =  GPIO_Pin_3;
-
-static const uint16_t LedOffset = 29;
-static const bool LedsReversed = true;
+static const uint16_t LedStripDataOutPin =  GPIO_Pin_12;
 
 static GPIO_TypeDef * const QepPortCOM = GPIOA;
 static const uint16_t QepPinCOM = GPIO_Pin_0;
