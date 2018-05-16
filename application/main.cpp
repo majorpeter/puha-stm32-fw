@@ -24,7 +24,7 @@ int main() {
     ledStrip.writeLeds(NULL, 0);
     RootNode::getInstance()->addChild(new LedStripControllerNode(&ledStrip));
 
-    UsartSerialInterface* serialInterface = new UsartSerialInterface(115200);
+    UsartSerialInterface* serialInterface = new UsartSerialInterface(460800);
     ProtocolParser* protocol = new ProtocolParser(serialInterface);
     serialInterface->listen();
 
