@@ -21,11 +21,7 @@ int main() {
 
     LedStripController ledStrip(Hardware::LedStripDataOutPort, Hardware::LedStripDataOutPin, 180, 0, false);
     ledStrip.init();
-    Color colors[180];
-    for (uint8_t i = 0; i < 10; i++) {
-        colors[i] = Color::red * ((10 - i) / 10.f);
-    }
-    ledStrip.writeLeds(colors, 180);
+    ledStrip.writeLeds(NULL, 0);
     RootNode::getInstance()->addChild(new LedStripControllerNode(&ledStrip));
 
     UsartSerialInterface* serialInterface = new UsartSerialInterface(115200);
