@@ -2,11 +2,11 @@
 #include "diag/Trace.h"
 
 #include "nodes/SystemNode.h"
-#include "EspLink.h"
 #include <ws2812-stm32/LedStripController.h>
 #include <ws2812-stm32/Color.h>
 #include <ws2812-stm32/node/LedStripControllerNode.h>
 #include <mprotocol-server/ProtocolParser.h>
+#include <mprotocol-iface-stm32-usart/UsartSerialInterface.h>
 #include <mprotocol-nodes/RootNode.h>
 
 #include <string.h>
@@ -28,8 +28,7 @@ int main() {
     ledStrip.writeLeds(colors, 180);
     RootNode::getInstance()->addChild(new LedStripControllerNode(&ledStrip));
 
-    EspLink* serialInterface = new EspLink(Hardware::EspResetPort,
-            Hardware::EspResetPin, Hardware::EspChPdPort, Hardware::EspChPdPin);
+    UsartSerialInterface* serialInterface = new UsartSerialInterface(115200);
     ProtocolParser* protocol = new ProtocolParser(serialInterface);
     serialInterface->listen();
 
