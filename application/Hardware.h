@@ -10,22 +10,21 @@
 
 #include <stm32f10x.h>
 
-class Qep;
-class FunctionButton;
-
 namespace Hardware {
 
 static GPIO_TypeDef * const LedStripDataOutPort = GPIOB;
 static const uint16_t LedStripDataOutPin =  GPIO_Pin_12;
+
+static GPIO_TypeDef * const LiveLedPort = GPIOC;
+static const uint16_t LiveLedPin =  GPIO_Pin_13;
 
 void RCC_Init();
 void GPIO_Remap();
 void SysTickInit();
 void RTC_Init();
 void IRQ_Init();
-
-Qep* createRotaryEncoder();
-FunctionButton* createFunctionButton();
+void LiveLedInit();
+void LiveLedToggle();
 
 }
 

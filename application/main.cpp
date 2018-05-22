@@ -15,6 +15,7 @@
 
 int main() {
     Hardware::RCC_Init();
+    Hardware::LiveLedInit();
     Hardware::GPIO_Remap();
     Hardware::SysTickInit();
     Hardware::IRQ_Init();
@@ -43,6 +44,7 @@ int main() {
     serialInterface->listen();
 
     while (1) {
+        Hardware::LiveLedToggle();
         protocol->handler();
     }
 

@@ -7,6 +7,8 @@
 
 #include "Hardware.h"
 
+#include <stm32f10x_gpio.h>
+
 namespace Hardware {
 
 void RCC_Init() {
@@ -48,6 +50,21 @@ void IRQ_Init() {
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
+}
+
+
+void LiveLedInit() {
+    GPIO_InitTypeDef GPIO_InitStruct;
+    GPIO_InitStruct.GPIO_Pin = LiveLedPin;
+    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
+    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_OD;
+    GPIO_Init(LiveLedPort, &GPIO_InitStruct);
+
+    GPIO_ResetBits(LiveLedPort, LiveLedPin);
+}
+
+void LiveLedToggle() {
+    GPIO_WriteBit(LiveLedPort, LiveLedPin, (BitAction) !GPIO_ReadInputDataBit(LiveLedPort, LiveLedPin));
 }
 
 }
