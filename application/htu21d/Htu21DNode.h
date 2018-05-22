@@ -15,6 +15,7 @@ class Htu21D;
 class Htu21DNode: public Node {
 public:
     DECLARE_PROP_FLOAT32_RO(Temperature);
+    DECLARE_PROP_FLOAT32_RO(Humidity);
 
     Htu21DNode(Htu21D* htu21d);
 private:

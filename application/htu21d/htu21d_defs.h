@@ -23,6 +23,7 @@ static const uint8_t CommandReadUserReg = 0xe7;
 static const uint8_t CommandSoftReset = 0xfe;
 
 static const uint8_t TemperatureMeasurementMaxTimeMs = 100;
+static const uint8_t HumidityMeasurementMaxTimeMs = 100;
 
 } /* namespace Htu21DRegs */
 

@@ -18,17 +18,23 @@ public:
     ~Htu21D() {}
 
     float getTemperature();
+    float getHumidity();
     void handler();
 private:
     I2cInterface* i2c;
     enum {
         State_Initial = 0,
-        State_StartTemp,
-        State_WaitTempMeas,
-        State_ReadTempMeas,
+        State_StartTemperature,
+        State_WaitTemperatureMeasurement,
+        State_ReadTemperatureMeasurement,
+        State_StartHumidity,
+        State_WaitHumidityMeasurement,
+        State_ReadHumidityMeasurement,
     } state;
 
     float temperature;
+    float humidity;
+
     int32_t measurementStartedAt;
 };
 
