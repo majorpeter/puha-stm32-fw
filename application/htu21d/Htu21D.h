@@ -17,9 +17,19 @@ public:
     Htu21D(I2cInterface* i2c);
     ~Htu21D() {}
 
-    int8_t getTemperature(float* dest);
+    float getTemperature();
+    void handler();
 private:
     I2cInterface* i2c;
+    enum {
+        State_Initial = 0,
+        State_StartTemp,
+        State_WaitTempMeas,
+        State_ReadTempMeas,
+    } state;
+
+    float temperature;
+    int32_t measurementStartedAt;
 };
 
 #endif /* MODULES_HTU21D_HTU21D_H_ */

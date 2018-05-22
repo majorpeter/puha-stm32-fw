@@ -36,8 +36,6 @@ int main() {
     };
     Stm32F1I2c* htu21dI2c = new Stm32F1I2c(&initStruct);
     Htu21D* htu21d = new Htu21D(htu21dI2c);
-    float temp = 0.f;
-    int8_t result = htu21d->getTemperature(&temp);
 
     UsartSerialInterface* serialInterface = new UsartSerialInterface(460800);
     ProtocolParser* protocol = new ProtocolParser(serialInterface);
@@ -47,6 +45,7 @@ int main() {
     while (1) {
         Hardware::LiveLedToggle();
         protocol->handler();
+        htu21d->handler();
     }
 
     return 0;
