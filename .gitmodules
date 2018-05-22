@@ -13,3 +13,9 @@
 [submodule "modules/mprotocol-nodes"]
 	path = modules/mprotocol-nodes
 	url = https://github.com/majorpeter/mprotocol-nodes.git
+[submodule "modules/iface-i2c"]
+	path = modules/iface-i2c
+	url = https://github.com/majorpeter/iface-i2c.git
+[submodule "modules/iface-i2c-stm32f1"]
+	path = modules/iface-i2c-stm32f1
+	url = https://github.com/majorpeter/iface-i2c-stm32f1.git
