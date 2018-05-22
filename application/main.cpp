@@ -9,6 +9,7 @@
 #include <mprotocol-iface-stm32-usart/UsartSerialInterface.h>
 #include <mprotocol-nodes/RootNode.h>
 #include <iface-i2c-stm32f1/Stm32F1I2c.h>
+#include "os/System.h"
 #include "htu21d/Htu21D.h"
 
 #include <string.h>
@@ -17,7 +18,6 @@ int main() {
     Hardware::RCC_Init();
     Hardware::LiveLedInit();
     Hardware::GPIO_Remap();
-    Hardware::SysTickInit();
     Hardware::IRQ_Init();
 
     RootNode::getInstance()->addChild(new SystemNode());
@@ -43,6 +43,7 @@ int main() {
     ProtocolParser* protocol = new ProtocolParser(serialInterface);
     serialInterface->listen();
 
+    Os::start();
     while (1) {
         Hardware::LiveLedToggle();
         protocol->handler();

@@ -23,13 +23,6 @@ void GPIO_Remap() {
     GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
 }
 
-/**
- * Configure SysTick interrupt in every 1ms
- */
-void SysTickInit() {
-    SysTick_Config(SystemCoreClock / 1000);
-}
-
 void IRQ_Init() {
     // 4 bits for pre-emption priority: NVIC_IRQChannelPreemptionPriority = 0..15
     // 0 bits for subpriority:          NVIC_IRQChannelSubPriority        = 0

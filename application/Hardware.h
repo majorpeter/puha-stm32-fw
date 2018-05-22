@@ -20,7 +20,6 @@ static const uint16_t LiveLedPin =  GPIO_Pin_13;
 
 void RCC_Init();
 void GPIO_Remap();
-void SysTickInit();
 void RTC_Init();
 void IRQ_Init();
 void LiveLedInit();

@@ -13,6 +13,7 @@
 class SystemNode: public Node {
 public:
     DECLARE_PROP_METHOD(reset);
+    DECLARE_PROP_INT32_RO(TimeMs);
 
     SystemNode();
 };
