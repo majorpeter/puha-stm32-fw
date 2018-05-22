@@ -11,6 +11,7 @@
 #include <iface-i2c-stm32f1/Stm32F1I2c.h>
 #include "os/System.h"
 #include "htu21d/Htu21D.h"
+#include "htu21d/Htu21DNode.h"
 
 #include <string.h>
 
@@ -36,6 +37,7 @@ int main() {
     };
     Stm32F1I2c* htu21dI2c = new Stm32F1I2c(&initStruct);
     Htu21D* htu21d = new Htu21D(htu21dI2c);
+    RootNode::getInstance()->addChild(new Htu21DNode(htu21d));
 
     UsartSerialInterface* serialInterface = new UsartSerialInterface(460800);
     ProtocolParser* protocol = new ProtocolParser(serialInterface);
