@@ -9,6 +9,7 @@
 #include <iface-i2c/I2cInterface.h>
 #include "os/System.h"
 #include "htu21d_defs.h"
+#include <stddef.h>
 
 using namespace Htu21DRegs;
 
@@ -17,6 +18,11 @@ Htu21D::Htu21D(I2cInterface* i2c): i2c(i2c) {
     temperature = 0.f;
     humidity = 0.f;
     measurementStartedAt = 0;
+    listener = NULL;
+}
+
+void Htu21D::setListener(Listener* listener) {
+    this->listener = listener;
 }
 
 float Htu21D::getTemperature() {
@@ -56,6 +62,9 @@ void Htu21D::handler() {
         if (result == 0) {
             uint16_t measurement = (measurementBytes[0] << 8) | measurementBytes[1];
             temperature = -46.85f + 175.72f * measurement / 65536.f;
+            if (listener != NULL) {
+                listener->onTemperatureChanged(temperature);
+            }
 
             // go to next measurement
             state = State_StartHumidity;
@@ -89,6 +98,9 @@ void Htu21D::handler() {
         if (result == 0) {
             uint16_t measurement = (measurementBytes[0] << 8) | (measurementBytes[1] & ~3);
             humidity = -6.f + 125.f * measurement / 65536.f;
+            if (listener != NULL) {
+                listener->onHumidityChanged(humidity);
+            }
 
             // done
             state = State_Initial;

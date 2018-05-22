@@ -18,6 +18,7 @@ PROP_ARRAY(props) = {
 
 Htu21DNode::Htu21DNode(Htu21D* htu21d): Node("HTU", "HTU21D sensor measurements"), htu21d(htu21d) {
     NODE_SET_PROPS(props);
+    htu21d->setListener(this);
 }
 
 ProtocolResult_t Htu21DNode::getTemperature(float* dest) const {
@@ -28,4 +29,12 @@ ProtocolResult_t Htu21DNode::getTemperature(float* dest) const {
 ProtocolResult_t Htu21DNode::getHumidity(float* dest) const {
     *dest = htu21d->getHumidity();
     return ProtocolResult_Ok;
+}
+
+void Htu21DNode::onTemperatureChanged(float) {
+    invalidateProperty(&prop_Temperature);
+}
+
+void Htu21DNode::onHumidityChanged(float) {
+    invalidateProperty(&prop_Humidity);
 }
