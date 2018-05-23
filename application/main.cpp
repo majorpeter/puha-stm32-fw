@@ -12,6 +12,8 @@
 #include "os/System.h"
 #include "htu21d/Htu21D.h"
 #include "htu21d/Htu21DNode.h"
+#include "LightSensor.h"
+#include "LightSensorNode.h"
 
 #include <string.h>
 
@@ -39,6 +41,9 @@ int main() {
     Htu21D* htu21d = new Htu21D(htu21dI2c);
     RootNode::getInstance()->addChild(new Htu21DNode(htu21d));
 
+    LightSensorNode* lightSensorNode = new LightSensorNode(new LightSensor());
+    RootNode::getInstance()->addChild(lightSensorNode);
+
     UsartSerialInterface* serialInterface = new UsartSerialInterface(460800);
     ProtocolParser* protocol = new ProtocolParser(serialInterface);
     serialInterface->listen();
@@ -48,6 +53,7 @@ int main() {
         Hardware::LiveLedToggle();
         protocol->handler();
         htu21d->handler();
+        lightSensorNode->handler();
     }
 
     return 0;
