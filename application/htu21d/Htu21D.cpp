@@ -51,26 +51,26 @@ void Htu21D::handler() {
         int32_t delta = Os::time_ms() - measurementStartedAt;
         if (delta > TemperatureMeasurementMaxTimeMs) {
             state = State_ReadTemperatureMeasurement;
-        } else {
-            break;
         }
+        break;
     }
-    /* no break */
     case State_ReadTemperatureMeasurement: {
         uint8_t measurementBytes[2];
         int8_t result = i2c->read(SlaveAddress8b, measurementBytes, 2);
         if (result == 0) {
-            uint16_t measurement = (measurementBytes[0] << 8) | measurementBytes[1];
-            temperature = -46.85f + 175.72f * measurement / 65536.f;
-            if (listener != NULL) {
-                listener->onTemperatureChanged(temperature);
-            }
+            if ((measurementBytes[1] & 0x3) == 0x0) {
+                uint16_t measurement = (measurementBytes[0] << 8) | measurementBytes[1];
+                temperature = -46.85f + 175.72f * measurement / 65536.f;
+                if (listener != NULL) {
+                    listener->onTemperatureChanged(temperature);
+                }
 
-            // go to next measurement
-            state = State_StartHumidity;
-        } else {
-            // retry
-            state = State_StartTemperature;
+                // go to next measurement
+                state = State_StartHumidity;
+                break;
+            }
+        // retry
+        state = State_StartTemperature;
         }
         break;
     }
@@ -87,28 +87,28 @@ void Htu21D::handler() {
         int32_t delta = Os::time_ms() - measurementStartedAt;
         if (delta > HumidityMeasurementMaxTimeMs) {
             state = State_ReadHumidityMeasurement;
-        } else {
-            break;
         }
+        break;
     }
-    /* no break */
     case State_ReadHumidityMeasurement: {
         uint8_t measurementBytes[2];
         int8_t result = i2c->read(SlaveAddress8b, measurementBytes, 2);
         if (result == 0) {
-            uint16_t measurement = (measurementBytes[0] << 8) | (measurementBytes[1] & ~3);
-            humidity = -6.f + 125.f * measurement / 65536.f;
-            if (listener != NULL) {
-                listener->onHumidityChanged(humidity);
-            }
+            if ((measurementBytes[1] & 0x3) == 0x2) {
+                uint16_t measurement = (measurementBytes[0] << 8) | (measurementBytes[1] & ~3);
+                humidity = -6.f + 125.f * measurement / 65536.f;
+                if (listener != NULL) {
+                    listener->onHumidityChanged(humidity);
+                }
 
-            // done
-            state = State_Initial;
-        } else {
-            // retry
-            state = State_StartHumidity;
+                // done
+                state = State_StartTemperature;
+                break;
+            }
+        }
+        // retry
+        state = State_StartHumidity;
         }
         break;
-    }
     }
 }
