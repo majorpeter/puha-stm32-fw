@@ -36,8 +36,16 @@ float Htu21D::getHumidity() {
 void Htu21D::handler() {
     switch (state) {
     case State_Initial:
-        state = State_StartTemperature;
-        /* no break */
+        state = State_WaitBootup;
+        measurementStartedAt = Os::time_ms();
+        break;
+    case State_WaitBootup: {
+        int32_t delta = Os::time_ms() - measurementStartedAt;
+        if (delta > 1000) {
+            state = State_StartTemperature;
+        }
+        break;
+    }
     case State_StartTemperature: {
         uint8_t command = CommandTriggerTemperatureMeasurement_HoldMaster;
         int8_t result = i2c->write(SlaveAddress8b, &command, 1);

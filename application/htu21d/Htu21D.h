@@ -35,6 +35,7 @@ private:
 
     enum {
         State_Initial = 0,
+        State_WaitBootup,
         State_StartTemperature,
         State_WaitTemperatureMeasurement,
         State_ReadTemperatureMeasurement,
