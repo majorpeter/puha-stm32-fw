@@ -10,13 +10,14 @@
 #include "os/System.h"
 #include "htu21d_defs.h"
 #include <stddef.h>
+#include <math.h>
 
 using namespace Htu21DRegs;
 
 Htu21D::Htu21D(I2cInterface* i2c): i2c(i2c) {
     state = State_Initial;
-    temperature = 0.f;
-    humidity = 0.f;
+    temperature = NAN;
+    humidity = NAN;
     measurementStartedAt = 0;
     listener = NULL;
 }
