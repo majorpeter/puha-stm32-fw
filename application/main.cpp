@@ -29,10 +29,10 @@ int main() {
     RootNode::getInstance()->addChild(new LedStripControllerNode(&ledStrip));
 
     Stm32F1I2c::InitStruct initStruct = {
-            .i2cPeriph = I2C1,
-            .sdaSclPort = GPIOB,
-            .sdaPin = GPIO_Pin_7,
-            .sclPin = GPIO_Pin_6,
+            .i2cPeriph = Hardware::Htu21DI2c,
+            .sdaSclPort = Hardware::Htu21DSdaSclPort,
+            .sdaPin = Hardware::Htu21DSdaPin,
+            .sclPin = Hardware::Htu21DSclPin,
             .clockSpeedHz = 100000
     };
     Stm32F1I2c* htu21dI2c = new Stm32F1I2c(&initStruct);

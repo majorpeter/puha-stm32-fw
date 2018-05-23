@@ -18,6 +18,11 @@ static const uint16_t LedStripDataOutPin =  GPIO_Pin_12;
 static GPIO_TypeDef * const LiveLedPort = GPIOC;
 static const uint16_t LiveLedPin =  GPIO_Pin_13;
 
+static I2C_TypeDef * const Htu21DI2c = I2C1;
+static GPIO_TypeDef * const Htu21DSdaSclPort = GPIOB;
+static const uint16_t Htu21DSdaPin = GPIO_Pin_7;
+static const uint16_t Htu21DSclPin = GPIO_Pin_6;
+
 void RCC_Init();
 void GPIO_Remap();
 void RTC_Init();
