@@ -16,6 +16,7 @@ class LightSensor {
 public:
     LightSensor();
     ~LightSensor() {}
+    float getValueLux();
 };
 
 #endif /* APPLICATION_LIGHTSENSOR_H_ */

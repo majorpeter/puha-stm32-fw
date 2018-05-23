@@ -44,3 +44,21 @@ LightSensor::LightSensor() {
     // start continuous conversion
     ADC_SoftwareStartConvCmd(ADC1, ENABLE);
 }
+
+float LightSensor::getValueLux() {
+    /// reference voltage connected to VDDA pin
+    static const float vRef = 3.3f;
+    /// it is a 12-bit ADC
+    static const uint16_t adcFullScale = 4096;
+    /// 1 kOhm
+    static const float emitterResistorValue_kOhm = 1.f;
+    /// 20 uA -> 20 lx, 100 uA -> 100 lx
+    static const float kps_lux_per_mA = 1000.f;
+
+    uint16_t measurement = ADC_GetConversionValue(ADC1);
+    float measuredVoltage = measurement * vRef / adcFullScale;
+    /// R = U/I -> I = U/R
+    float measuredCurrent_mA = measuredVoltage / emitterResistorValue_kOhm;
+
+    return measuredCurrent_mA * kps_lux_per_mA;
+}
