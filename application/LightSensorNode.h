@@ -15,6 +15,7 @@ class LightSensor;
 class LightSensorNode: public Node {
 public:
     DECLARE_PROP_FLOAT32_RO(Illuminance);
+    DECLARE_PROP_UINT32_RO(Measurement);
 
     LightSensorNode(LightSensor* sensor);
     void handler();

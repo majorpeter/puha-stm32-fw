@@ -59,12 +59,16 @@ void LightSensor::handler() {
     }
 }
 
-float LightSensor::getAverageValueLux() {
+uint16_t LightSensor::getAverageValue() {
     uint16_t sum = 0;
     for (uint8_t i = 0; i < measurementNumber; i++) {
         sum += measurements[i];
     }
-    return getValueLux(sum / measurementNumber);
+    return sum / measurementNumber;
+}
+
+float LightSensor::getAverageValueLux() {
+    return getValueLux(getAverageValue());
 }
 
 float LightSensor::getValueLux(uint16_t measurement) {

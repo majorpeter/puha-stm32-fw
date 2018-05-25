@@ -20,6 +20,7 @@ public:
     ~LightSensor() {}
 
     void handler();
+    uint16_t getAverageValue();
     float getAverageValueLux();
     static float getValueLux(uint16_t measurement);
 private:

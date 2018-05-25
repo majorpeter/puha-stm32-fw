@@ -9,9 +9,11 @@
 #include "LightSensor.h"
 
 MK_PROP_FLOAT32_RO(LightSensorNode, Illuminance, "Illuminance measurement in Lux");
+MK_PROP_UINT32_RO(LightSensorNode, Measurement, "Raw ADC measurement");
 
 PROP_ARRAY(props) = {
-        PROP_ADDRESS(LightSensorNode, Illuminance)
+        PROP_ADDRESS(LightSensorNode, Illuminance),
+        PROP_ADDRESS(LightSensorNode, Measurement),
 };
 
 LightSensorNode::LightSensorNode(LightSensor* sensor) :
@@ -21,6 +23,11 @@ LightSensorNode::LightSensorNode(LightSensor* sensor) :
 
 ProtocolResult_t LightSensorNode::getIlluminance(float* dest) const {
     *dest = sensor->getAverageValueLux();
+    return ProtocolResult_Ok;
+}
+
+ProtocolResult_t LightSensorNode::getMeasurement(uint32_t* dest) const {
+    *dest = sensor->getAverageValue();
     return ProtocolResult_Ok;
 }
 
