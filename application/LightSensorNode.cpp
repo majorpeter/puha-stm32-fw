@@ -20,7 +20,7 @@ LightSensorNode::LightSensorNode(LightSensor* sensor) :
 }
 
 ProtocolResult_t LightSensorNode::getIlluminance(float* dest) const {
-    *dest = sensor->getValueLux();
+    *dest = sensor->getAverageValueLux();
     return ProtocolResult_Ok;
 }
 

@@ -9,8 +9,14 @@
 #include <stm32f10x_adc.h>
 #include <stm32f10x_gpio.h>
 #include <stm32f10x_rcc.h>
+#include <string.h>
 
-LightSensor::LightSensor() {
+LightSensor::LightSensor(uint8_t measurementNumber) {
+    this->measurementNumber = measurementNumber;
+    this->measurementIndex = 0;
+    this->measurements = new uint16_t[measurementNumber];
+    memset(this->measurements, 0x00, measurementNumber * sizeof(uint16_t));
+
     GPIO_InitTypeDef GPIO_InitStruct;
     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_1;
     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
@@ -25,7 +31,7 @@ LightSensor::LightSensor() {
     ADC_InitTypeDef ADC_InitStruct;
     ADC_InitStruct.ADC_Mode = ADC_Mode_Independent;
     ADC_InitStruct.ADC_ScanConvMode = DISABLE;
-    ADC_InitStruct.ADC_ContinuousConvMode = ENABLE;
+    ADC_InitStruct.ADC_ContinuousConvMode = DISABLE;
     ADC_InitStruct.ADC_ExternalTrigConv = ADC_ExternalTrigConv_None;
     ADC_InitStruct.ADC_DataAlign = ADC_DataAlign_Right;
     ADC_InitStruct.ADC_NbrOfChannel = 1;
@@ -40,12 +46,28 @@ LightSensor::LightSensor() {
     while (ADC_GetResetCalibrationStatus(ADC1));
     ADC_StartCalibration(ADC1);
     while (ADC_GetCalibrationStatus(ADC1));
-
-    // start continuous conversion
-    ADC_SoftwareStartConvCmd(ADC1, ENABLE);
 }
 
-float LightSensor::getValueLux() {
+void LightSensor::handler() {
+    ADC_SoftwareStartConvCmd(ADC1, ENABLE);
+    while (ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);
+
+    measurements[measurementIndex] = ADC_GetConversionValue(ADC1);
+    measurementIndex++;
+    if (measurementIndex == measurementNumber) {
+        measurementIndex = 0;
+    }
+}
+
+float LightSensor::getAverageValueLux() {
+    uint16_t sum = 0;
+    for (uint8_t i = 0; i < measurementNumber; i++) {
+        sum += measurements[i];
+    }
+    return getValueLux(sum / measurementNumber);
+}
+
+float LightSensor::getValueLux(uint16_t measurement) {
     /// reference voltage connected to VDDA pin
     static const float vRef = 3.3f;
     /// it is a 12-bit ADC
@@ -55,7 +77,6 @@ float LightSensor::getValueLux() {
     /// 20 uA -> 20 lx, 100 uA -> 100 lx
     static const float kps_lux_per_mA = 1000.f;
 
-    uint16_t measurement = ADC_GetConversionValue(ADC1);
     float measuredVoltage = measurement * vRef / adcFullScale;
     /// R = U/I -> I = U/R
     float measuredCurrent_mA = measuredVoltage / emitterResistorValue_kOhm;

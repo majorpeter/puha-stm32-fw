@@ -41,7 +41,8 @@ int main() {
     Htu21D* htu21d = new Htu21D(htu21dI2c);
     RootNode::getInstance()->addChild(new Htu21DNode(htu21d));
 
-    LightSensorNode* lightSensorNode = new LightSensorNode(new LightSensor());
+    LightSensor* lightSensor = new LightSensor(16);
+    LightSensorNode* lightSensorNode = new LightSensorNode(lightSensor);
     RootNode::getInstance()->addChild(lightSensorNode);
 
     UsartSerialInterface* serialInterface = new UsartSerialInterface(460800);
@@ -53,6 +54,7 @@ int main() {
         Hardware::LiveLedToggle();
         protocol->handler();
         htu21d->handler();
+        lightSensor->handler();
         lightSensorNode->handler();
     }
 
