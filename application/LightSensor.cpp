@@ -17,6 +17,13 @@ LightSensor::LightSensor(uint8_t measurementNumber) {
     this->measurements = new uint16_t[measurementNumber];
     memset(this->measurements, 0x00, measurementNumber * sizeof(uint16_t));
 
+    this->listener = NULL;
+
+    this->hardwareInit();
+}
+
+void LightSensor::hardwareInit() {
+
     GPIO_InitTypeDef GPIO_InitStruct;
     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_1;
     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
@@ -56,6 +63,10 @@ void LightSensor::handler() {
     measurementIndex++;
     if (measurementIndex == measurementNumber) {
         measurementIndex = 0;
+
+        if (listener != NULL) {
+            listener->onValueChanged(this);
+        }
     }
 }
 
@@ -86,4 +97,8 @@ float LightSensor::getValueLux(uint16_t measurement) {
     float measuredCurrent_mA = measuredVoltage / emitterResistorValue_kOhm;
 
     return measuredCurrent_mA * kps_lux_per_mA;
+}
+
+void LightSensor::setListener(LightSensor::Listener* listener) {
+    this->listener = listener;
 }

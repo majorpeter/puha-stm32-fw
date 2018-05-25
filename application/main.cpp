@@ -55,7 +55,6 @@ int main() {
         protocol->handler();
         htu21d->handler();
         lightSensor->handler();
-        lightSensorNode->handler();
     }
 
     return 0;

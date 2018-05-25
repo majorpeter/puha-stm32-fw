@@ -16,10 +16,18 @@
  */
 class LightSensor {
 public:
+    class Listener {
+    public:
+        virtual void onValueChanged(LightSensor* sender) = 0;
+        virtual ~Listener() {}
+    };
+
     LightSensor(uint8_t sampleNumber);
     ~LightSensor() {}
+    void setListener(Listener* listener);
 
     void handler();
+
     uint16_t getAverageValue();
     float getAverageValueLux();
     static float getValueLux(uint16_t measurement);
@@ -27,6 +35,10 @@ private:
     uint16_t* measurements;
     uint8_t measurementNumber;
     uint8_t measurementIndex;
+
+    Listener* listener;
+
+    void hardwareInit();
 };
 
 #endif /* APPLICATION_LIGHTSENSOR_H_ */

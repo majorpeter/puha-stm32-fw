@@ -9,18 +9,18 @@
 #define APPLICATION_LIGHTSENSORNODE_H_
 
 #include <mprotocol-nodes/Node.h>
+#include "LightSensor.h"
 
-class LightSensor;
-
-class LightSensorNode: public Node {
+class LightSensorNode: public Node, private LightSensor::Listener {
 public:
     DECLARE_PROP_FLOAT32_RO(Illuminance);
     DECLARE_PROP_UINT32_RO(Measurement);
 
     LightSensorNode(LightSensor* sensor);
-    void handler();
 private:
     LightSensor* sensor;
+
+    virtual void onValueChanged(LightSensor* sender);
 };
 
 #endif /* APPLICATION_LIGHTSENSORNODE_H_ */
