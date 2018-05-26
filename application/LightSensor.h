@@ -22,19 +22,20 @@ public:
         virtual ~Listener() {}
     };
 
-    LightSensor(uint8_t sampleNumber);
+    LightSensor(uint16_t sampleNumber);
     ~LightSensor() {}
     void setListener(Listener* listener);
 
     void handler();
 
-    uint16_t getAverageValue();
+    float getAverageValue();
     float getAverageValueLux();
     static float getValueLux(uint16_t measurement);
 private:
-    uint16_t* measurements;
-    uint8_t measurementNumber;
-    uint8_t measurementIndex;
+    uint32_t measurementSum;
+    float measurementAverage;
+    uint16_t measurementIndex;
+    const uint16_t measurementNumber;
 
     Listener* listener;
 

@@ -9,15 +9,17 @@
 #include <stm32f10x_adc.h>
 #include <stm32f10x_gpio.h>
 #include <stm32f10x_rcc.h>
+
 #include <string.h>
+#include <math.h>
 
-LightSensor::LightSensor(uint8_t measurementNumber) {
-    this->measurementNumber = measurementNumber;
-    this->measurementIndex = 0;
-    this->measurements = new uint16_t[measurementNumber];
-    memset(this->measurements, 0x00, measurementNumber * sizeof(uint16_t));
+LightSensor::LightSensor(uint16_t measurementNumber) :
+        measurementNumber(measurementNumber) {
+    measurementSum = 0;
+    measurementAverage = NAN;
+    measurementIndex = 0;
 
-    this->listener = NULL;
+    listener = NULL;
 
     this->hardwareInit();
 }
@@ -59,9 +61,12 @@ void LightSensor::handler() {
     ADC_SoftwareStartConvCmd(ADC1, ENABLE);
     while (ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);
 
-    measurements[measurementIndex] = ADC_GetConversionValue(ADC1);
+    measurementSum += ADC_GetConversionValue(ADC1);
     measurementIndex++;
     if (measurementIndex == measurementNumber) {
+        measurementAverage = ((float) measurementSum) / measurementNumber;
+
+        measurementSum = 0;
         measurementIndex = 0;
 
         if (listener != NULL) {
@@ -70,16 +75,12 @@ void LightSensor::handler() {
     }
 }
 
-uint16_t LightSensor::getAverageValue() {
-    uint16_t sum = 0;
-    for (uint8_t i = 0; i < measurementNumber; i++) {
-        sum += measurements[i];
-    }
-    return sum / measurementNumber;
+float LightSensor::getAverageValue() {
+    return measurementAverage;
 }
 
 float LightSensor::getAverageValueLux() {
-    return getValueLux(getAverageValue());
+    return getValueLux(measurementAverage);
 }
 
 float LightSensor::getValueLux(uint16_t measurement) {
