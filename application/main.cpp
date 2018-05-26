@@ -14,6 +14,8 @@
 #include "htu21d/Htu21DNode.h"
 #include "LightSensor.h"
 #include "LightSensorNode.h"
+#include "MotionSensor.h"
+#include "MotionSensorNode.h"
 
 #include <string.h>
 
@@ -45,6 +47,9 @@ int main() {
     LightSensorNode* lightSensorNode = new LightSensorNode(lightSensor);
     RootNode::getInstance()->addChild(lightSensorNode);
 
+    MotionSensor* motionSensor = new MotionSensor();
+    RootNode::getInstance()->addChild(new MotionSensorNode(motionSensor));
+
     UsartSerialInterface* serialInterface = new UsartSerialInterface(460800);
     ProtocolParser* protocol = new ProtocolParser(serialInterface);
     serialInterface->listen();
@@ -55,6 +60,7 @@ int main() {
         protocol->handler();
         htu21d->handler();
         lightSensor->handler();
+        motionSensor->handler();
     }
 
     return 0;
