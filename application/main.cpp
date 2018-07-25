@@ -43,7 +43,7 @@ int main() {
     Htu21D* htu21d = new Htu21D(htu21dI2c);
     RootNode::getInstance()->addChild(new Htu21DNode(htu21d));
 
-    LightSensor* lightSensor = new LightSensor(512);
+    LightSensor* lightSensor = new LightSensor(4096);
     LightSensorNode* lightSensorNode = new LightSensorNode(lightSensor);
     RootNode::getInstance()->addChild(lightSensorNode);
 
