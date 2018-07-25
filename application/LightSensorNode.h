@@ -14,7 +14,7 @@
 class LightSensorNode: public Node, private LightSensor::Listener {
 public:
     DECLARE_PROP_FLOAT32_RO(Illuminance);
-    DECLARE_PROP_UINT32_RO(Measurement);
+    DECLARE_PROP_FLOAT32_RO(Measurement);
 
     LightSensorNode(LightSensor* sensor);
 private:
